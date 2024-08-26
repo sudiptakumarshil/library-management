@@ -1,0 +1,9 @@
+Django==5.0.6
+mysqlclient
+psycopg2-binary
+django-environ
+django-allauth
+Pillow
+watchdog>=4.0.1
+crispy-bootstrap5
+django-environ
