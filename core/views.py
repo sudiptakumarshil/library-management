@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, View, ListView
+from django.views.generic import TemplateView, View
 from category.models import Category
 
 
@@ -9,7 +9,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.filter(status=True).values(
-            "id", "name"
+            "id", "name", "slug"
         )
         return context
 

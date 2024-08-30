@@ -24,4 +24,5 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("book/detail", BookDetailView.as_view(), name="book.detail"),
     path("auth/", include("user.urls")),
+    path("book/", include("book.urls")),
 ]

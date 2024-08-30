@@ -2,7 +2,7 @@
   <li class="list-group-item active" aria-current="true">Categories</li>
   {% for category in categories %}
     <li class="list-group-item">
-      <a href="{{ category.id }}" style="text-decoration: none; color:black">{{ category.name }}</a>
+      <a {% if category.slug %} href="{% url 'book.category_book' category.slug %}" {% endif %} style="text-decoration: none; color:black">{{ category.name }}</a>
     </li>
   {% endfor %}
 </ul>
