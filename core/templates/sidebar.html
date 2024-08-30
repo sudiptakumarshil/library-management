@@ -1,8 +1,8 @@
 <ul class="list-group shadow-sm rounded">
   <li class="list-group-item active" aria-current="true">Categories</li>
-  <li class="list-group-item">Fiction</li>
-  <li class="list-group-item">Non-Fiction</li>
-  <li class="list-group-item">Science</li>
-  <li class="list-group-item">History</li>
-  <li class="list-group-item">Children's Books</li>
+  {% for category in categories %}
+    <li class="list-group-item">
+      <a href="{{ category.id }}" style="text-decoration: none; color:black">{{ category.name }}</a>
+    </li>
+  {% endfor %}
 </ul>

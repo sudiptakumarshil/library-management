@@ -120,6 +120,14 @@
         "documentation": {}
     },
     {
+        "label": "FormView",
+        "importPath": "django.views.generic",
+        "description": "django.views.generic",
+        "isExtraImport": true,
+        "detail": "django.views.generic",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -146,6 +154,14 @@
     },
     {
         "label": "path",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "include",
         "importPath": "django.urls",
         "description": "django.urls",
         "isExtraImport": true,
@@ -422,7 +438,7 @@
         "kind": 5,
         "importPath": "library_management.urls",
         "description": "library_management.urls",
-        "peekOfCode": "urlpatterns = [\n    path('admin/', admin.site.urls),\n    path('', HomeView.as_view(), name='home'),\n    path('book/detail', BookDetailView.as_view(), name='book.detail'),\n]",
+        "peekOfCode": "urlpatterns = [\n    path('admin/', admin.site.urls),\n    path('', HomeView.as_view(), name='home'),\n    path('book/detail', BookDetailView.as_view(), name='book.detail'),\n    path('auth/', include('user.urls')),\n]",
         "detail": "library_management.urls",
         "documentation": {}
     },
@@ -478,6 +494,33 @@
         "description": "user.models",
         "peekOfCode": "class UserAddress(models.Model):\n    user = models.OneToOneField(User, related_name=\"address\", on_delete=models.CASCADE)\n    street_address = models.CharField(max_length=100)\n    city = models.CharField(max_length=100)\n    postal_code = models.IntegerField()\n    country = models.CharField(max_length=100)\n    def __str__(self):\n        return str(self.user.email)",
         "detail": "user.models",
+        "documentation": {}
+    },
+    {
+        "label": "UserRegistrationView",
+        "kind": 6,
+        "importPath": "user.urls",
+        "description": "user.urls",
+        "peekOfCode": "class UserRegistrationView(FormView):\n    template_name = \"accounts/user_registration.html\"\n    form_class = UserRegistrationForm\n    success_url = reverse_lazy(\"profile\")\n    def form_valid(self, form):\n        print(form.cleaned_data)\n        user = form.save()\n        login(self.request, user)\n        print(user)\n        return super().form_valid(",
+        "detail": "user.urls",
+        "documentation": {}
+    },
+    {
+        "label": "UserLoginView",
+        "kind": 6,
+        "importPath": "user.urls",
+        "description": "user.urls",
+        "peekOfCode": "class UserLoginView(LoginView):\n    template_name = \"accounts/user_login.html\"\n    def get_success_url(self):\n        return reverse_lazy(\"home\")\nclass UserLogoutView(LogoutView):\n    def get_success_url(self):\n        if self.request.user.is_authenticated:\n            logout(self.request)\n        return reverse_lazy(\"home\")",
+        "detail": "user.urls",
+        "documentation": {}
+    },
+    {
+        "label": "UserLogoutView",
+        "kind": 6,
+        "importPath": "user.urls",
+        "description": "user.urls",
+        "peekOfCode": "class UserLogoutView(LogoutView):\n    def get_success_url(self):\n        if self.request.user.is_authenticated:\n            logout(self.request)\n        return reverse_lazy(\"home\")",
+        "detail": "user.urls",
         "documentation": {}
     },
     {
