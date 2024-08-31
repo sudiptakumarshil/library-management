@@ -1,6 +1,6 @@
 from django.views.generic import FormView
 from .forms import UserRegistrationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db import transaction, DatabaseError
