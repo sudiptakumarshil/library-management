@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}
+  Deposit
+{% endblock %}
+
+{% block content %}
+  <div class="mt-1" id="main">
+    <div class="card mx-auto" style="max-width: 50%;">
+      <h1 class="card-title text-center py-4">{{ title }}</h1>
+      {% for error in form.non_field_errors %}
+        <p class="text-danger text-center">{{ error }}</p>
+      {% endfor %}
+
+      <form method="post" class="px-4 pb-4">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label" for="amount">Amount</label>
+          <input class="form-control" name="amount" id="amount" type="number" required placeholder="Amount" />
+        </div>
+        {% if form.amount.errors %}
+          {% for error in form.amount.errors %}
+            <p class="text-danger">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+        <div class="text-center">
+          <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

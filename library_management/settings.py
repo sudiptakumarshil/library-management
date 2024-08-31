@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "core",
     "category",
     "book",
+    "deposit",
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 from category.models import Category
 from book.models import Book
 
@@ -16,8 +16,3 @@ class HomeView(TemplateView):
         return context
 
 
-class BookDetailView(View):
-    template_name = "details.html"
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)

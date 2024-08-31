@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row mt-4">
+  <div class="row mt-4" id="main">
     <div class="col-md-3">
       {% include 'sidebar.html' %}
     </div>
@@ -20,7 +20,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{ book.title }}</h5>
                 <p class="card-text">{{ book.description|truncatewords:4 }}</p>
-                <a href="{% url 'book.detail' %}" class="btn btn-primary btn-block">Detail</a>
+                <a href="{% url 'book.detail' book.id %}" class="btn btn-primary btn-block">Detail</a>
               </div>
             </div>
           </div>
