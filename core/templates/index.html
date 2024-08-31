@@ -13,16 +13,18 @@
     </div>
     <div class="col-md-9">
       <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm rounded">
-            <img src="https://picsum.photos/200/300?grayscale" class="card-img-top reduced-height" alt="Book Image" />
-            <div class="card-body">
-              <h5 class="card-title">Book Title</h5>
-              <p class="card-text">This is a brief description of the book, highlighting its main points and enticing the reader to purchase it.</p>
-              <a href="{% url 'book.detail' %}" class="btn btn-primary btn-block">Detail</a>
+        {% for book in books %}
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm rounded">
+              <img src="{{ book.image.url }}" class="card-img-top reduced-height" alt="Book Image" />
+              <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text">{{ book.description|truncatewords:4 }}</p>
+                <a href="{% url 'book.detail' %}" class="btn btn-primary btn-block">Detail</a>
+              </div>
             </div>
           </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

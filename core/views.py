@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
 from category.models import Category
+from book.models import Book
 
 
 class HomeView(TemplateView):
@@ -11,6 +12,7 @@ class HomeView(TemplateView):
         context["categories"] = Category.objects.filter(status=True).values(
             "id", "name", "slug"
         )
+        context["books"] = Book.objects.filter(status=True)[:5]
         return context
 
 

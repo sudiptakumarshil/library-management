@@ -5,12 +5,12 @@ from category.models import Category
 
 class CategoryBookView(ListView):
     model = Book
-    template_name = "core/home.html"
+    template_name = "index.html"
     context_object_name = "books"
 
     def get_queryset(self):
         category_slug = self.kwargs.get("slug")
-        return Book.objects.filter(category__slug=category_slug)
+        return Book.objects.filter(category__slug=category_slug, status=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
