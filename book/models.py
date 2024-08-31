@@ -32,3 +32,13 @@ class BorrowBook(models.Model):
 
     def __str__(self):
         return self.book.title
+
+
+class BookReview(models.Model):
+    user = models.ForeignKey(User, related_name="review_user", on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, related_name="review_book", on_delete=models.CASCADE)
+    comment = models.TextField()
+    rating = models.SmallIntegerField(db_comment="1-5 star")
+
+    def __str__(self):
+        return self.comment

@@ -50,19 +50,6 @@
       border-color: #452b57;
     }
     
-    .review-card {
-      border: 1px solid #dee2e6;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background-color: #f8f9fa;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .review-card h5 {
-      font-size: 1.2rem;
-    }
-    
     .review-form input,
     .review-form textarea,
     .review-form select {
@@ -71,6 +58,35 @@
     
     .review-form button {
       border-radius: 5px;
+    }
+    .review-card {
+      border: 1px solid #e3e3e3;
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 16px;
+    }
+    
+    .user-avatar img {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .user-info .font-weight-bold {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .rating .star {
+      font-size: 1rem;
+      color: #ffd700;
+    }
+    
+    .comment-text {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 {% endblock %}
@@ -81,7 +97,6 @@
       {% include 'sidebar.html' %}
     </div>
     <div class="col-md-9">
-      <!-- Book Details -->
       <div class="row mt-4">
         <div class="col-md-4">
           <img src="{{ book.image.url }}" class="img-fluid book-cover" alt="Book Cover" />
@@ -94,44 +109,75 @@
             {% if request.user.is_authenticated %}
               <form method="post">
                 {% csrf_token %}
-                <button type="submit" onclick="return confirm('Are you sure?')" name="borrow_now" class="btn btn-primary btn-lg">Borrow Now</button>
+                {% if already_borrowed and already_borrowed.return_date or already_borrowed is None %}
+                  <button type="submit" onclick="return confirm('Are you sure?')" name="borrow_now" class="btn btn-primary btn-lg">Borrow Now</button>
+                {% else %}
+                  <p style="color: red;">You already borrowed the book. To lend again, you should return the book.</p>
+                {% endif %}
               </form>
+            {% else %}
+              <p style="color: red;">Please log in to borrow the book.</p>
             {% endif %}
           </div>
 
           <div class="reviews">
             <h3>Customer Reviews</h3>
-            <div class="review-card">
-              <h5>Review Title</h5>
-              <p class="text-muted">by Reviewer Name</p>
-              <p>This is a sample review of the book. It should provide insights into the reader's experience with the book, including what they liked or disliked and their overall rating.</p>
-            </div>
-            {% if request.user.is_authenticated %}
-              <div class="review-form">
-                <h4>Submit Your Review</h4>
-                <form>
-                  <div class="mb-3">
-                    <label for="reviewTitle" class="form-label">Review Title</label>
-                    <input type="text" class="form-control" id="reviewTitle" placeholder="Enter review title" required />
+            {% for comment in comments %}
+              <div class="review-card p-4 mb-4 border rounded-lg shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="user-info">
+                    <p class="font-weight-bold mb-1">{{ comment.user.first_name }} {{ comment.user.last_name }}</p>
+                    <div class="rating d-flex">
+                      {% for star in stars %}
+                        <span class="star text-warning">
+                          {% if star <= comment.rating %}
+                            &#9733;
+                          {% else %}
+                            &#9734;
+                          {% endif %}
+                        </span>
+                      {% endfor %}
+                    </div>
                   </div>
-                  <div class="mb-3">
-                    <label for="reviewContent" class="form-label">Review Content</label>
-                    <textarea class="form-control" id="reviewContent" rows="3" placeholder="Enter your review" required></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="reviewRating" class="form-label">Rating</label>
-                    <select class="form-select" id="reviewRating" required>
-                      <option value="" disabled selected>Select rating</option>
-                      <option value="5">5 Stars</option>
-                      <option value="4">4 Stars</option>
-                      <option value="3">3 Stars</option>
-                      <option value="2">2 Stars</option>
-                      <option value="1">1 Star</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit Review</button>
-                </form>
+                </div>
+                <p class="comment-text">{{ comment.comment }}</p>
               </div>
+            {% endfor %}
+
+            {% if request.user.is_authenticated %}
+              {% if already_borrowed %}
+                <div class="review-form">
+                  <h4>Submit Your Review</h4>
+                  <form method="post">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                      {{ hidden_field.errors }} {{ hidden_field }}
+                    {% endfor %}
+
+                    <div class="mb-3">
+                      <label for="reviewContent" class="form-label">Review Content</label>
+                      {{ form.comment }}
+                      {% if form.comment.errors %}
+                        {% for error in form.comment.errors %}
+                          <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="reviewRating" class="form-label">Rating</label>
+                      {{ form.rating }}
+                      {% if form.rating.errors %}
+                        {% for error in form.rating.errors %}
+                          <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                    <button type="submit" name="submit_review" class="btn btn-primary">Submit Review</button>
+                  </form>
+                </div>
+              {% endif %}
             {% endif %}
           </div>
         </div>

@@ -121,6 +121,41 @@
           <button class="btn btn-primary" type="submit">Update</button>
         </div>
       </form>
+
+      <div class="row mt-4 mb-4">
+        <div class="col-md-12">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Book Name</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th>Return Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for book in borrowed_books %}
+                <tr>
+                  <th>1</th>
+                  <td>{{ book.book.title }}</td>
+                  <td>{{ book.price }}</td>
+                  <td>{{ book.date }}</td>
+                  <td>
+                    {% if book.return_date %}
+                      {{ book.return_date }}
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a href="#" name="return_button" class="btn btn-primary btn-sm">Return Book</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
