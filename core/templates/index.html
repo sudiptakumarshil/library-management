@@ -18,9 +18,8 @@
             <div class="card shadow-sm rounded">
               <img src="{{ book.image.url }}" class="card-img-top reduced-height" alt="Book Image" />
               <div class="card-body">
-                <h5 class="card-title">{{ book.title }}</h5>
+                <h5 class="card-title"><a href="{% url 'book.detail' book.id %}" style="text-decoration: none;">{{ book.title }}</a></h5>
                 <p class="card-text">{{ book.description|truncatewords:4 }}</p>
-                <a href="{% url 'book.detail' book.id %}" class="btn btn-primary btn-block">Detail</a>
               </div>
             </div>
           </div>

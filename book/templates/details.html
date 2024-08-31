@@ -94,7 +94,7 @@
             {% if request.user.is_authenticated %}
               <form method="post">
                 {% csrf_token %}
-                <button type="submit" name="borrow_now" class="btn btn-primary btn-lg">Borrow Now</button>
+                <button type="submit" onclick="return confirm('Are you sure?')" name="borrow_now" class="btn btn-primary btn-lg">Borrow Now</button>
               </form>
             {% endif %}
           </div>

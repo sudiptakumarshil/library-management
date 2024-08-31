@@ -4,6 +4,7 @@ from category.models import Category
 from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.shortcuts import redirect
+from book.models import BorrowBook
 
 
 class CategoryBookView(ListView):
@@ -36,23 +37,20 @@ class BookDetailView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        # book = self.get_object()
-        # form = ReviewForm(request.POST)
-        # if form.is_valid():
-        #     review = form.save(commit=False)
-        #     review.book = book
-        #     review.user = request.user
-        #     review.save()
-        #     return redirect('book-detail', pk=book.pk)
+        book = self.get_object()
         if "borrow_now" in request.POST:
-            return self.handle_borrow_now(request, "book")
+            return self.handle_borrow_now(request, book)
         return self.get(request, *args, **kwargs)
 
     def handle_borrow_now(self, request, book):
+        borrowDictionary = {
+            "user": request.user,
+            "book": book,
+            "price": book.price,
+        }
+
+        transaction = BorrowBook.objects.create(**borrowDictionary)
+        transaction.save()
 
         messages.success(request, "Thank you for your purchase!")
-        return redirect("thank-you")
-
-    # else:
-    #     messages.error(request, "Sorry, this book is out of stock.")
-    #     return redirect("book-detail", pk=book.pk)
+        return redirect("home")
