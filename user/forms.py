@@ -71,7 +71,32 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control"
+
+        if self.instance:
+            try:
+                user_account = self.instance.account
+                user_address = self.instance.address
+            except UserAccount.DoesNotExist:
+                user_account = None
+                user_address = None
+
+            if user_account:
+                self.fields["gender"].initial = user_account.gender
+                self.fields["birth_date"].initial = user_account.birth_date
+                self.fields["street_address"].initial = user_address.street_address
+                self.fields["city"].initial = user_address.city
+                self.fields["postal_code"].initial = user_address.postal_code
+                self.fields["country"].initial = user_address.country
 
     def save(self, commit=True):
         user = super().save(commit=False)

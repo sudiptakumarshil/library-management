@@ -1,9 +1,12 @@
-from django.views.generic import FormView
-from .forms import UserRegistrationForm
+from django.views.generic import FormView, View
+from .forms import UserRegistrationForm, UserUpdateForm
 from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db import transaction, DatabaseError
+from django.shortcuts import render
+from django.shortcuts import redirect
+from django.contrib import messages
 
 
 class UserRegistrationView(FormView):
@@ -32,3 +35,19 @@ class UserLoginView(LoginView):
 class UserLogoutView(LogoutView):
     def get_success_url(self):
         return reverse_lazy("home")
+
+
+class UserUpdateView(View):
+    template_name = "profile.html"
+
+    def get(self, request):
+        form = UserUpdateForm(instance=request.user)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile Updated!")
+            return redirect("profile")
+        return render(request, self.template_name, {"form": form})

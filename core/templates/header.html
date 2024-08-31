@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'home' %}">Book Seller</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    
+
     {% if request.user.is_authenticated %}
       <div class="flex w-auto">
         <div class="text-blue-900" style="color: #fff;">Welcome, {{ request.user.first_name }} (balance : {{ request.user.account.balance }})</div>
@@ -17,7 +17,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Profile</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">Profile</a>
           </li>
 
           <li class="nav-item">
