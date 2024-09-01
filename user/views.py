@@ -1,4 +1,4 @@
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 from .forms import UserRegistrationForm, UserUpdateForm
 from django.contrib.auth import login
 from django.urls import reverse_lazy
@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from book.models import BorrowBook
 from django.utils import timezone
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseRedirect
 
 
 class UserRegistrationView(FormView):
@@ -56,3 +58,21 @@ class UserUpdateView(TemplateView):
         context = self.get_context_data()
         context["form"] = form
         return self.render_to_response(context)
+
+
+class ReturnBookView(View):
+    def get(self, request, id):
+        try:
+            with transaction.atomic():
+                obj = get_object_or_404(BorrowBook, id=id)
+
+                obj.return_date = timezone.now()
+                obj.save()
+
+                obj.user.account.balance += obj.price
+                obj.user.account.save()
+
+        except DatabaseError as e:
+            print(f"An error occurred: {e}")
+
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))

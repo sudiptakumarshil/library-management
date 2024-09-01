@@ -148,7 +148,9 @@
                     {% endif %}
                   </td>
                   <td>
-                    <a href="#" name="return_button" class="btn btn-primary btn-sm">Return Book</a>
+                    {% if book.return_date is None %}
+                      <a href="{% url 'return_book' book.id %}" name="return_button" onclick="return confirm('Are you sure to return the book?')" class="btn btn-primary btn-sm">Return Book</a>
+                    {% endif %}
                   </td>
                 </tr>
               {% endfor %}
