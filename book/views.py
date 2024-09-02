@@ -10,6 +10,18 @@ from user.models import UserAccount
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .forms import BookReviewForm
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+
+def send_transaction_email(user, amount, book, subject, template):
+    message = render_to_string(
+        template,
+        {"user": user, "amount": amount, "book": book},
+    )
+    send_email = EmailMultiAlternatives(subject, "", to=[user.email])
+    send_email.attach_alternative(message, "text/html")
+    send_email.send()
 
 
 class CategoryBookView(ListView):
@@ -84,6 +96,13 @@ class BookDetailView(DetailView):
                     borrow = BorrowBook.objects.create(**borrowDictionary)
                     borrow.save()
 
+                    send_transaction_email(
+                        self.request.user,
+                        book.price,
+                        book,
+                        "Borrowing Book Message",
+                        "borrow_book_email.html",
+                    )
                     messages.success(request, "Thank you for your purchase!")
                     return redirect("home")
 
