@@ -6,7 +6,7 @@ certifi
 chardet
 click
 colorama
-command-not-foundpip freeze > requirements.txt
+command-not-found
 cryptography
 cupshelpers
 dbus-python
